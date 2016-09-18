@@ -5,47 +5,54 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
-#set PS1 colours and git status
-colors() {
-	local fgc bgc vals seq0
+# Normal Colors
+Black='\e[0;30m'        # Black
+Red='\e[0;31m'          # Red
+Green='\e[0;32m'        # Green
+Yellow='\e[0;33m'       # Yellow
+Blue='\e[0;34m'         # Blue
+Purple='\e[0;35m'       # Purple
+Cyan='\e[0;36m'         # Cyan
+White='\e[0;37m'        # White
 
-	printf "Color escapes are %s\n" '\e[${value};...;${value}m'
-	printf "Values 30..37 are \e[33mforeground colors\e[m\n"
-	printf "Values 40..47 are \e[43mbackground colors\e[m\n"
-	printf "Value  1 gives a  \e[1mbold-faced look\e[m\n\n"
+# Bold
+BBlack='\e[1;30m'       # Black
+BRed='\e[1;31m'         # Red
+BGreen='\e[1;32m'       # Green
+BYellow='\e[1;33m'      # Yellow
+BBlue='\e[1;34m'        # Blue
+BPurple='\e[1;35m'      # Purple
+BCyan='\e[1;36m'        # Cyan
+BWhite='\e[1;37m'       # White
 
-	# foreground colors
-	for fgc in {30..37}; do
-		# background colors
-		for bgc in {40..47}; do
-			fgc=${fgc#37} # white
-			bgc=${bgc#40} # black
+# Background
+On_Black='\e[40m'       # Black
+On_Red='\e[41m'         # Red
+On_Green='\e[42m'       # Green
+On_Yellow='\e[43m'      # Yellow
+On_Blue='\e[44m'        # Blue
+On_Purple='\e[45m'      # Purple
+On_Cyan='\e[46m'        # Cyan
+On_White='\e[47m'       # White
 
-			vals="${fgc:+$fgc;}${bgc}"
-			vals=${vals%%;}
+NC="\e[m"               # Color Reset
 
-			seq0="${vals:+\e[${vals}m}"
-			printf "  %-9s" "${seq0:-(default)}"
-			printf " ${seq0}TEXT\e[m"
-			printf " \e[${vals:+${vals+$vals;}}1mBOLD\e[m"
-		done
-		echo; echo
-	done
-}
+ALERT=${BWhite}${On_Red} # Bold White on red background
+
 #get local prompt or remote connection
 if [ -n "$SSH_CLIENT" ]; then
   Machine='@\h '
 fi
 
-function get_home () {
-  if [ "$(pwd)" == "/home/$(whoami)" ];then
+function get_home {
+  if [[ "$(pwd)" == "/home/$(whoami)" ]];then
     echo "home"
- fi
+	fi
 }
 
 # get current branch in git repo
 function parse_git_branch() {
-  if [ `get_home` == "" ]; then
+  if [[ `get_home` == "" ]]; then
 	  BRANCH=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
 	  if [ ! "${BRANCH}" == "" ]
 	  then
@@ -106,16 +113,7 @@ function load()
 }
 
 # Returns a color indicating system load.
-function load_color()
-
-{
-  Red='\e[0;31m'
-  Green='\e[0;32m'
-  Yellow='\e[0;33m'
-  White='\e[0;37m'
-  On_Red='\e[41m'
-  ALERT=${White}${On_Red}
-
+function load_color() {
     local SYSLOAD=$(load)
     if [ ${SYSLOAD} -gt ${XLOAD} ]; then
         echo -en ${ALERT}
@@ -131,7 +129,7 @@ function load_color()
 
 export TERM=xterm-256color
 
-export PS1="[\u\[\e[34m\]$Machine \[\e[35m\]\`parse_git_branch\`\[\e[m\]\[\$(load_color)\]\W\[\e[m\]] "
+export PS1="[\u\[$Blue\]$Machine \[$Purple\]\`parse_git_branch\`\[$NC\]\[\$(load_color)\]\W\[$NC\]] "
 
 
 #setup infinite actively updateing bash history file
@@ -165,8 +163,7 @@ alias fuck="shutdown -h now"
 alias booty="tail"
 alias shit="tmpcmd=$(tail -n 1 .bash_history) && sudo $tmpcmd"
 
-function xtitle()
-{
+function xtitle() {
     case "$TERM" in
     *term* | rxvt)
         echo -en  "\e]0;$*\a" ;;
@@ -180,8 +177,7 @@ HOST=$(hostname)
 alias htop='xtitle Processes on $HOST && htop'
 alias make='xtitle Making $(basename $PWD) ; make'
 
-function man()
-{
+function man() {
     for i ; do
         xtitle The $(basename $1|tr -d .[:digit:]) manual
         command man -a "$i"
@@ -193,8 +189,7 @@ function man()
 #-------------------------------------------------------------
 
 # Handy Extract Program
-function extract()
-{
+function extract() {
     if [ -f $1 ] ; then
         case $1 in
             *.tar.bz2)   tar xvjf $1     ;;
@@ -216,8 +211,7 @@ function extract()
 }
 
 # Get current host related info.
-function ii()
-{
+function ii() {
     echo -e "\nYou are logged on ${BRed}$HOST"
     echo -e "\n${BRed}Additionnal information:$NC " ; uname -a
     echo -e "\n${BRed}Users logged on:$NC " ; who |
