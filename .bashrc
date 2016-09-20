@@ -5,6 +5,15 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+LOGIN="false" #change to true to enable starting X server from login in tty1 (replace session manager)
+
+if [[ "$LOGIN" = "true" ]]; then
+  temp=$(tty)
+  if [[ "${temp:5}" = "tty1" ]]; then
+    startx
+  fi
+fi
+
 # Normal Colors
 Black='\e[0;30m'        # Black
 Red='\e[0;31m'          # Red
