@@ -232,6 +232,10 @@ function ii() {
     echo
 }
 
+if [[ "$TERMINOLOGY" -eq "1" ]]; then
+    pokemon random
+fi
+
 #extended bashrc for specific comtputers (specific distros bashrc)
 [[ -f ~/.extend.bashrc ]] && . ~/.extend.bashrc
 #bash completion files completion
