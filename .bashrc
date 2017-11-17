@@ -232,8 +232,14 @@ function ii() {
     echo
 }
 
+#compatibility check for pokemon terminolody theme
 if [[ "$TERMINOLOGY" -eq "1" ]]; then
     pokemon random
+fi
+
+#Check for bash-insulter https://github.com/hkbakke/bash-insulter
+if [ -f /etc/bash.command-not-found ]; then
+    . /etc/bash.command-not-found
 fi
 
 #extended bashrc for specific comtputers (specific distros bashrc)
