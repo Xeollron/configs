@@ -232,7 +232,7 @@ function ii() {
     echo
 }
 
-#compatibility check for pokemon terminolody theme
+#compatibility check for pokemon Terminology theme
 if [[ "$TERMINOLOGY" -eq "1" ]]; then
     pokemon random
 fi
@@ -242,7 +242,7 @@ if [ -f /etc/bash.command-not-found ]; then
     . /etc/bash.command-not-found
 fi
 
-#extended bashrc for specific comtputers (specific distros bashrc)
+#extended bashrc for specific environments (specific distros bashrc)
 [[ -f ~/.extend.bashrc ]] && . ~/.extend.bashrc
 #bash completion files completion
 [ -r /usr/share/bash-completion/bash_completion   ] && . /usr/share/bash-completion/bash_completion
